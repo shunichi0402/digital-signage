@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import settings from '../config/setting.json'
 
 const formatDate = (date) => {
     const yyyy = date.getFullYear().toString()
@@ -16,8 +17,11 @@ export const useWeatherStore = defineStore('weather', () => {
 
     const fetchRainfallForecast = async () => {
         try {
+            const latitude = settings.latitude
+            const longitude = settings.longitude
+
             const params = new URLSearchParams({
-                coordinates: '140.053447,35.727486',
+                coordinates: `${longitude},${latitude}`,
                 date: formatDate(new Date())
             })
             const url = import.meta.env.VITE_WEATHER_API_URL + '/digital-signage-a6df9/asia-northeast1/api/rainfall?' + params.toString()
@@ -41,9 +45,12 @@ export const useWeatherStore = defineStore('weather', () => {
 
     const fetchWeatherForecast = async () => {
         try {
+            const latitude = settings.latitude
+            const longitude = settings.longitude
+
             const params = new URLSearchParams({
-                latitude: '35.72748611',
-                longitude: '140.05344722'
+                latitude: latitude,
+                longitude: longitude
             })
             const url = import.meta.env.VITE_WEATHER_API_URL + '/digital-signage-a6df9/asia-northeast1/api/weather?' + params.toString()
             const response = await fetch(url, {
