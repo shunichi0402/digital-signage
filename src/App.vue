@@ -7,7 +7,7 @@ import RainfallForecast from './components/RainfallForecast.vue'
 // import NewsDisplay from './components/NewsDisplay.vue'
 // import SlackMessagesDisplay from './components/SlackMessagesDisplay.vue'
 import { useSunStore } from './stores/sunStore.js'
-import { computed, watch, onMounted } from 'vue'
+import { computed, watch, onMounted, onUnmounted } from 'vue'
 
 const sunStore = useSunStore()
 sunStore.fetchSunTimes()
@@ -46,6 +46,13 @@ watch([() => sunStore.sunrise, () => sunStore.sunset], () => {
 
 onMounted(() => {
     document.body.style.background = backgroundColor.value
+    const intervalId = setInterval(() => {
+        document.body.style.background = getBackgroundColor()
+    }, 30 * 60 * 1000) // 30分ごとにチェック
+
+    onUnmounted(() => {
+        clearInterval(intervalId)
+    })
 })
 </script>
 
